@@ -101,7 +101,6 @@
             }
 
             // add resistance to type
-
             let resistanceString
             let resistanceTypeRoll = getRandomInt(5)
             
@@ -110,8 +109,6 @@
                 ilvl**scaleModifier + Math.sqrt(plvl) + rangeModifier
             )/resistanceModifier
 
-            console.log(resistanceRoll)
-                
             switch(resistanceTypeRoll) {
                 case 0: 
                     resistanceString = `+${resistanceRoll} resistance to frost`
@@ -132,16 +129,12 @@
                     break    
             }
 
-            console.log(resistanceString)
-
             let resistanceNode = document.createElement("div")
             let resistanceTextNode = document.createTextNode(resistanceString)
             resistanceNode.appendChild(resistanceTextNode)
             extrasContainer.appendChild(resistanceNode)
             
-
             // add damage to type
-
             let plusDamageString
             let plusDamageTypeRoll = getRandomInt(5)
 
@@ -149,8 +142,6 @@
                 ilvl**scaleModifier + Math.sqrt(plvl) - rangeModifier, 
                 ilvl**scaleModifier + Math.sqrt(plvl) + rangeModifier
             )/plusDamageModifier
-
-            console.log(plusDamageTypeRoll)
 
             switch(plusDamageTypeRoll) {
                 case 0: 
@@ -176,7 +167,6 @@
             let plusDamageTextNode = document.createTextNode(plusDamageString)
             plusDamageNode.appendChild(plusDamageTextNode)
             extrasContainer.appendChild(plusDamageNode)
-            
         }
 
         document.addEventListener("keydown", event => {
