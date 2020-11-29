@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+     <head>
+        <meta charset="utf-8">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div id="header">
+            <h1>Biddyloot</h1>
+        </div>
+        <div id="item-container">
+            <div id="item-box">
+                <div id="item-frame">
+                    <div id="icon-container">
+                        <img id="icon-img" src="sword.png">
+                    </div>
+                    <div id="name-container">
+                        <h1 id="item-name">Sword of Placeholdering</h1>
+                    </div>
+                    <hr class="line">
+                    <div class="grid-container">
+                        <div class="grid-item" name="stamina">Stamina:</div>
+                        <div class="grid-item-val" id="stamina-val" name="stamina-val">value</div>
+                        <div class="grid-item" name="strength">Strength:</div>
+                        <div class="grid-item-val" id="strength-val" name="strength-val">value</div>
+                        <div class="grid-item" name="agility">Agility:</div>
+                        <div class="grid-item-val" id="agility-val" name="agility-val">value</div>
+                        <div class="grid-item" name="dexterity">Dexterity:</div>
+                        <div class="grid-item-val" id="dexterity-val" name="dexterity-val">value</div>
+                    </div>
+                    <hr class="line">
+                    <div id="extras-container"></div>
+                </div>
+            </div>
+        </div>
+        <div id="button-container">
+            <button id="generate" onclick="generateValues()">Generate</button>
+        </div>
+        <div id="item-lvl-container">
+            <label for="item-lvl" class="biddy-label">Enter Item Level Below</label>
+            <input type="text" class="biddy-input" id="item-lvl" value="20">  
+            <label for="prof-lvl" class="biddy-label">Enter Proficiency Score Below</label>
+            <input type="text" class="biddy-input" id="prof-lvl" value="3">  
+        </div>
+    </body>
+    <script>
+        const staminaVal = document.querySelector("#stamina-val")
+        const strengthVal = document.querySelector("#strength-val")
+        const agilityVal = document.querySelector("#agility-val")
+        const dexterityVal = document.querySelector("#dexterity-val")
+        
+        const extrasContainer = document.querySelector("#extras-container")
+
+        let scaleModifier = 1.6
+        let rangeModifier = 15
+        
+        function getRandomIntFromRange(min, max) {
+            min = Math.ceil(min)
+            max = Math.floor(max)
+            return Math.floor(Math.random() * (max - min) + min)
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max))
+        }
+
+        function godFormula() {
+            let ilvl = document.querySelector("#item-lvl").value
+            let plvl = document.querySelector("#prof-lvl").value
+
+            if (plvl >= 2) {
+                return getRandomIntFromRange(
+                    ilvl**scaleModifier + Math.sqrt(plvl) - rangeModifier, 
+                    ilvl**scaleModifier + Math.sqrt(plvl) + rangeModifier
+                )
+            } else {
+                return getRandomIntFromRange(
+                    ilvl**scaleModifier + Math.sqrt(2) - rangeModifier, 
+                    ilvl**scaleModifier + Math.sqrt(2) + rangeModifier
+                )
+            }
+        }
+        
+        function generateValues() {
+            staminaVal.innerHTML = godFormula()
+            strengthVal.innerHTML = godFormula()
+            agilityVal.innerHTML = godFormula()
+            dexterityVal.innerHTML = godFormula()
+
+            let ilvl = document.querySelector("#item-lvl").value
+            let plvl = document.querySelector("#prof-lvl").value
+            
+            let resistanceModifier = 2
+            let plusDamageModifier = 2
+
+            // remove previous extra strings
+            while (extrasContainer.firstChild) {
+                extrasContainer.removeChild(extrasContainer.lastChild);
+            }
+
+            // add resistance to type
+
+            let resistanceString
+            let resistanceTypeRoll = getRandomInt(5)
+            
+            let resistanceRoll = getRandomIntFromRange(
+                ilvl**scaleModifier + Math.sqrt(plvl) - rangeModifier, 
+                ilvl**scaleModifier + Math.sqrt(plvl) + rangeModifier
+            )/resistanceModifier
+
+            console.log(resistanceRoll)
+                
+            switch(resistanceTypeRoll) {
+                case 0: 
+                    resistanceString = `+${resistanceRoll} resistance to frost`
+                    break
+                case 1: 
+                    resistanceString = `+${resistanceRoll} resistance to fire`
+                    break
+                case 2: 
+                    resistanceString = `+${resistanceRoll} resistance to arcane`
+                    break
+                case 3: 
+                    resistanceString = `+${resistanceRoll} resistance to disease`
+                    break
+                case 4: 
+                    resistanceString = `+${resistanceRoll} resistance to physical`
+                    break
+                default:
+                    break    
+            }
+
+            console.log(resistanceString)
+
+            let resistanceNode = document.createElement("div")
+            let resistanceTextNode = document.createTextNode(resistanceString)
+            resistanceNode.appendChild(resistanceTextNode)
+            extrasContainer.appendChild(resistanceNode)
+            
+
+            // add damage to type
+
+            let plusDamageString
+            let plusDamageTypeRoll = getRandomInt(5)
+
+            let plusDamageRoll = getRandomIntFromRange(
+                ilvl**scaleModifier + Math.sqrt(plvl) - rangeModifier, 
+                ilvl**scaleModifier + Math.sqrt(plvl) + rangeModifier
+            )/plusDamageModifier
+
+            console.log(plusDamageTypeRoll)
+
+            switch(plusDamageTypeRoll) {
+                case 0: 
+                    plusDamageString = `+${plusDamageRoll} damage to undead`
+                    break
+                case 1: 
+                    plusDamageString = `+${plusDamageRoll} damage to creatures`
+                    break
+                case 2: 
+                    plusDamageString = `+${plusDamageRoll} damage to humanoid`
+                    break
+                case 3: 
+                    plusDamageString = `+${plusDamageRoll} damage to demons`
+                    break
+                case 4: 
+                    plusDamageString = `+${plusDamageRoll} damage to elemental`
+                    break
+                default:
+                    break 
+            }
+
+            let plusDamageNode = document.createElement("div")
+            let plusDamageTextNode = document.createTextNode(plusDamageString)
+            plusDamageNode.appendChild(plusDamageTextNode)
+            extrasContainer.appendChild(plusDamageNode)
+            
+        }
+
+        document.addEventListener("keydown", event => {
+            if (event.keyCode === 13) {
+                generateValues()
+            }
+        })
+    </script>
+ </html`
